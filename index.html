@@ -14,7 +14,7 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Sacramento&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Sacramento&family=Playfair+Display:ital,wght@0,600;1,400;1,600&display=swap" rel="stylesheet">
 
     <script>
         tailwind.config = {
@@ -30,6 +30,7 @@
                     },
                     fontFamily: {
                         cinzel: ['Cinzel', 'serif'],
+                        playfair: ['Playfair Display', 'serif'],
                         sacramento: ['Sacramento', 'cursive'],
                         sans: ['Plus Jakarta Sans', 'sans-serif']
                     }
@@ -61,7 +62,7 @@
         .glass-card-hover:hover {
             transform: translateY(-8px) scale(1.02);
             border-color: rgba(232, 180, 184, 0.5);
-            box-shadow: 0 15px 35px rgba(232, 180, 184, 0.2);
+            box-shadow: 0 15px 35px rgba(232, 180, 184, 0.25);
         }
 
         /* Glowing Text & Borders */
@@ -72,7 +73,7 @@
             box-shadow: 0 0 25px rgba(232, 180, 184, 0.5), 0 0 50px rgba(45, 27, 78, 0.8);
         }
 
-        /* Floating Stars Canvas */
+        /* Background Stars Canvas */
         #starsCanvas {
             position: fixed;
             top: 0;
@@ -98,24 +99,23 @@
             background: #e8b4b8;
         }
 
-        /* Envelope Animations */
-        .envelope-wrapper {
-            perspective: 1000px;
-        }
+        /* Envelope Styles */
         .envelope {
             position: relative;
             width: 100%;
             max-width: 480px;
-            height: 280px;
-            background: #1e152a;
-            border-radius: 12px;
-            border: 1px solid rgba(232, 180, 184, 0.3);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+            height: 260px;
+            background: linear-gradient(135deg, #1e152a 0%, #2d1a38 100%);
+            border-radius: 16px;
+            border: 1px solid rgba(232, 180, 184, 0.35);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6), inset 0 0 20px rgba(232,180,184,0.05);
             cursor: pointer;
-            transition: transform 0.6s ease;
+            transition: all 0.5s ease;
         }
         .envelope:hover {
-            transform: translateY(-5px);
+            transform: translateY(-8px);
+            border-color: rgba(232, 180, 184, 0.7);
+            box-shadow: 0 25px 50px rgba(232, 180, 184, 0.2);
         }
 
         /* Candle Flame Animation */
@@ -148,14 +148,14 @@
             100% { opacity: 0; transform: translateY(-40px) scale(3); filter: blur(4px); }
         }
 
-        /* Lightbox Modal */
+        /* Lightbox & Modal */
         .modal-active {
             display: flex !important;
-            animation: fadeIn 0.3s ease-out forwards;
+            animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
         @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
         }
     </style>
 </head>
@@ -167,13 +167,13 @@
     <!-- Top Music Control Bar -->
     <header class="fixed top-0 left-0 w-full z-50 p-4 flex justify-between items-center bg-gradient-to-b from-[#09070f] via-[#09070f]/80 to-transparent backdrop-blur-sm">
         <div class="flex items-center space-x-2">
-            <span class="text-xs uppercase tracking-widest text-roseGold/70 font-cinzel">Special Moment</span>
+            <span class="text-xs uppercase tracking-widest text-roseGold/80 font-cinzel">A Symphony for Habibah</span>
         </div>
-        <button id="musicToggleBtn" onclick="toggleAudio()" class="glass-card px-4 py-2 rounded-full flex items-center space-x-2 text-xs font-semibold text-roseGold border border-roseGold/30 hover:bg-roseGold/20 transition-all shadow-lg">
+        <button id="musicToggleBtn" onclick="toggleAudio()" class="glass-card px-5 py-2.5 rounded-full flex items-center space-x-2.5 text-xs font-semibold text-roseGold border border-roseGold/40 hover:bg-roseGold/20 transition-all shadow-lg hover:scale-105">
             <svg id="musicIcon" class="w-4 h-4 animate-spin-slow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 .895-2 3-2 3 .895 3 2zm12 0c0 1.105-1.343 2-3 2s-3-.895-3-2 .895-2 3-2 3 .895 3 2zM9 10l12-3"></path>
             </svg>
-            <span id="musicText">PUTAR MUSIK ROMANTIS 🎵</span>
+            <span id="musicText">PUTAR MELODI ULANG TAHUN 🎼</span>
         </button>
     </header>
 
@@ -190,27 +190,27 @@
                          alt="Habibah Khoirunnisa Ramadhan" 
                          class="w-full h-full object-cover rounded-full border-2 border-nightBg">
                 </div>
-                <div class="absolute -bottom-2 right-4 bg-accentPurple/90 border border-roseGold/40 text-roseGold text-xs px-3 py-1 rounded-full backdrop-blur-md shadow-md">
-                    ✨ Birthday Queen
+                <div class="absolute -bottom-2 right-4 bg-accentPurple/90 border border-roseGold/40 text-roseGold text-xs px-3.5 py-1 rounded-full backdrop-blur-md shadow-md font-cinzel">
+                    ✨ The Queen of Today
                 </div>
             </div>
 
             <!-- Title & Subtitle -->
             <div class="space-y-4 max-w-2xl">
                 <span class="inline-block px-4 py-1.5 rounded-full glass-card text-xs tracking-widest text-roseGold uppercase font-cinzel">
-                    A Celebration of You
+                    Happy Birthday, Beautiful Soul
                 </span>
                 <h1 class="text-4xl md:text-6xl font-cinzel font-bold text-transparent bg-clip-text bg-gradient-to-r from-roseGold via-white to-roseGoldGlow glow-text leading-tight">
                     Selamat Ulang Tahun,<br>Habibah Khoirunnisa Ramadhan
                 </h1>
-                <p class="text-sm md:text-base text-roseGold/80 font-light italic leading-relaxed">
-                    "Hari ini adalah tentang menghargai keindahan sosokmu, kebaikan hatimu, serta setiap jejak kenangan manis yang tak pernah pudar oleh waktu."
+                <p class="text-sm md:text-base text-roseGold/90 font-light italic leading-relaxed font-playfair">
+                    "Di antara jutaan insan, hadirmu adalah salah satu hal terindah. Hari ini, dunia tersenyum menyambut bertambahnya usiamu yang penuh keanggunan."
                 </p>
             </div>
 
             <!-- Sender Tag -->
             <div class="glass-card px-6 py-2.5 rounded-full inline-flex items-center space-x-2 border border-roseGold/30">
-                <span class="text-xs text-gray-300">Persembahan tulus dari:</span>
+                <span class="text-xs text-gray-300">Dirayakan penuh kekaguman oleh:</span>
                 <span class="text-xs font-semibold text-roseGold font-cinzel tracking-wider">Rifqi Bilal Afriza</span>
             </div>
 
@@ -220,8 +220,8 @@
         <!-- INTERACTIVE BIRTHDAY CAKE SECTION -->
         <section class="glass-card rounded-3xl p-8 md:p-12 text-center space-y-8 border border-roseGold/20 relative overflow-hidden">
             <div class="space-y-2">
-                <h2 class="text-2xl md:text-3xl font-cinzel font-bold text-roseGold">Tiup Lilin & Panjatkan Harapan 🎂</h2>
-                <p class="text-xs md:text-sm text-gray-300">Klik tombol di bawah atau tiup ke mikrofon HP/Laptop kamu untuk mematikan lilinnya!</p>
+                <h2 class="text-2xl md:text-3xl font-cinzel font-bold text-roseGold">Make a Wish & Tiup Lilinnya 🎂</h2>
+                <p class="text-xs md:text-sm text-gray-300">Pejamkan mata sejenak, utarakan harapan terbaikmu, lalu klik tombol atau tiup mikrofonmu!</p>
             </div>
 
             <!-- 3D CSS Cake Illustration -->
@@ -245,7 +245,7 @@
                         </div>
                     </div>
                     <div class="w-52 h-16 bg-gradient-to-r from-accentPurple via-[#3e2768] to-accentPurple rounded-b-2xl border-t-2 border-roseGold/40 shadow-2xl relative">
-                        <div class="absolute bottom-2 left-0 w-full text-center text-[10px] font-cinzel tracking-widest text-roseGold/70">
+                        <div class="absolute bottom-2 left-0 w-full text-center text-[10px] font-cinzel tracking-widest text-roseGold/80">
                             HABIBAH KHOIRUNNISA
                         </div>
                     </div>
@@ -256,11 +256,11 @@
 
             <!-- Control Buttons -->
             <div class="flex flex-wrap justify-center gap-4">
-                <button onclick="blowCandle()" class="px-6 py-3 rounded-full bg-gradient-to-r from-deepRose to-roseGold text-nightBg font-semibold text-xs tracking-wider uppercase hover:opacity-90 transition-all shadow-lg hover:scale-105">
+                <button onclick="blowCandle()" class="px-7 py-3 rounded-full bg-gradient-to-r from-deepRose via-roseGold to-deepRose text-nightBg font-bold text-xs tracking-wider uppercase hover:opacity-90 transition-all shadow-lg hover:scale-105">
                     💨 Tiup Lilin Sekarang
                 </button>
-                <button id="micBtn" onclick="initMic()" class="px-6 py-3 rounded-full glass-card border border-roseGold/40 text-roseGold text-xs tracking-wider uppercase hover:bg-roseGold/20 transition-all shadow-lg">
-                    🎤 Aktifkan Sensor Tiupan Mikrofon
+                <button id="micBtn" onclick="initMic()" class="px-7 py-3 rounded-full glass-card border border-roseGold/40 text-roseGold text-xs tracking-wider uppercase hover:bg-roseGold/20 transition-all shadow-lg">
+                    🎤 Sensor Tiupan Mikrofon
                 </button>
             </div>
         </section>
@@ -269,15 +269,15 @@
         <!-- PHOTO GALLERY SECTION -->
         <section class="space-y-8">
             <div class="text-center space-y-2">
-                <span class="text-xs uppercase tracking-widest text-roseGold font-cinzel">Memory Lane</span>
-                <h2 class="text-3xl md:text-4xl font-cinzel font-bold text-white">Sosok Anggun dalam Ingatan 📸</h2>
-                <p class="text-xs md:text-sm text-gray-400">Klik pada foto mana saja untuk melihat tampilan penuh yang mempesona.</p>
+                <span class="text-xs uppercase tracking-widest text-roseGold font-cinzel">Memory Gallery</span>
+                <h2 class="text-3xl md:text-4xl font-cinzel font-bold text-white">Pesona Yang Tak Pernah Pudar 📸</h2>
+                <p class="text-xs md:text-sm text-gray-400">Klik pada foto untuk menikmati potret anggun Habibah lebih jelas.</p>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 
                 <!-- Photo Card 1 -->
-                <div class="glass-card glass-card-hover rounded-2xl p-4 cursor-pointer" onclick="openLightbox('foto1.jpeg', 'Pancaran Keanggunan & Senyuman Indah')">
+                <div class="glass-card glass-card-hover rounded-2xl p-4 cursor-pointer" onclick="openLightbox('foto1.jpeg', 'Pancaran Keanggunan yang Menenangkan Hati')">
                     <div class="aspect-[3/4] rounded-xl overflow-hidden mb-4 bg-purple-950/40 relative">
                         <img src="foto1.jpeg" 
                              onerror="this.onerror=null; this.src='foto4.jpeg';" 
@@ -285,13 +285,13 @@
                              class="w-full h-full object-cover rounded-xl hover:scale-110 transition-transform duration-700">
                     </div>
                     <div class="text-center space-y-1">
-                        <h3 class="font-cinzel text-roseGold font-semibold text-sm">Pesona Pertama</h3>
-                        <p class="text-xs text-gray-400 italic">Kehangatan yang selalu menenangkan hati.</p>
+                        <h3 class="font-cinzel text-roseGold font-semibold text-sm">Anggun & Tulus</h3>
+                        <p class="text-xs text-gray-400 italic font-playfair">Pancaran kehangatan yang tak pernah gagal membuat kagum.</p>
                     </div>
                 </div>
 
                 <!-- Photo Card 2 -->
-                <div class="glass-card glass-card-hover rounded-2xl p-4 cursor-pointer" onclick="openLightbox('foto2.jpeg', 'Kehangatan & Senyuman Malam yang Manis')">
+                <div class="glass-card glass-card-hover rounded-2xl p-4 cursor-pointer" onclick="openLightbox('foto2.jpeg', 'Binar Senyuman yang Menghiasi Malam')">
                     <div class="aspect-[3/4] rounded-xl overflow-hidden mb-4 bg-purple-950/40 relative">
                         <img src="foto2.jpeg" 
                              onerror="this.onerror=null; this.src='foto4.jpeg';" 
@@ -299,13 +299,13 @@
                              class="w-full h-full object-cover rounded-xl hover:scale-110 transition-transform duration-700">
                     </div>
                     <div class="text-center space-y-1">
-                        <h3 class="font-cinzel text-roseGold font-semibold text-sm">Senyuman Manis</h3>
-                        <p class="text-xs text-gray-400 italic">Sinar kebahagiaan yang selalu hadir.</p>
+                        <h3 class="font-cinzel text-roseGold font-semibold text-sm">Senyum Manis</h3>
+                        <p class="text-xs text-gray-400 italic font-playfair">Sinar kebahagiaan yang selalu menghidupkan suasana.</p>
                     </div>
                 </div>
 
                 <!-- Photo Card 3 -->
-                <div class="glass-card glass-card-hover rounded-2xl p-4 cursor-pointer" onclick="openLightbox('foto3.jpeg', 'Keceriaan & Kepribadian yang Hangat')">
+                <div class="glass-card glass-card-hover rounded-2xl p-4 cursor-pointer" onclick="openLightbox('foto3.jpeg', 'Keceriaan Alami yang Penuh Energi Positif')">
                     <div class="aspect-[3/4] rounded-xl overflow-hidden mb-4 bg-purple-950/40 relative">
                         <img src="foto3.jpeg" 
                              onerror="this.onerror=null; this.src='foto4.jpeg';" 
@@ -314,7 +314,7 @@
                     </div>
                     <div class="text-center space-y-1">
                         <h3 class="font-cinzel text-roseGold font-semibold text-sm">Momen Ceria</h3>
-                        <p class="text-xs text-gray-400 italic">Canda tawa yang membawa energi positif.</p>
+                        <p class="text-xs text-gray-400 italic font-playfair">Kepribadian hangat yang selalu menyenangkan.</p>
                     </div>
                 </div>
 
@@ -324,7 +324,7 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
                 
                 <!-- Photo Card 4 -->
-                <div class="glass-card glass-card-hover rounded-2xl p-4 flex flex-col md:flex-row items-center gap-4 cursor-pointer" onclick="openLightbox('foto4.jpeg', 'Tatap Menenangkan yang Selalu Berkesan')">
+                <div class="glass-card glass-card-hover rounded-2xl p-4 flex flex-col md:flex-row items-center gap-4 cursor-pointer" onclick="openLightbox('foto4.jpeg', 'Tatap Menenangkan yang Selalu Berkesan Dalam')">
                     <div class="w-full md:w-2/5 aspect-square rounded-xl overflow-hidden bg-purple-950/40">
                         <img src="foto4.jpeg" 
                              onerror="this.onerror=null; this.src='foto1.jpeg';" 
@@ -333,15 +333,15 @@
                     </div>
                     <div class="w-full md:w-3/5 space-y-2 text-center md:text-left">
                         <span class="text-[10px] font-cinzel text-roseGold/70 uppercase tracking-widest">Special Highlight</span>
-                        <h3 class="font-cinzel text-roseGold font-bold text-base">Tatap Menenangkan</h3>
+                        <h3 class="font-cinzel text-roseGold font-bold text-base">Tatapan Menenangkan</h3>
                         <p class="text-xs text-gray-300 leading-relaxed font-light">
-                            Setiap tatapan dan ketulusanmu menyimpan keindahan tersendiri yang membuat siapa saja terkesan.
+                            Ada kedamaian tersendiri setiap kali menatap senyum dan ketulusanmu. Sosok yang selalu istimewa.
                         </p>
                     </div>
                 </div>
 
                 <!-- Photo Card 5 -->
-                <div class="glass-card glass-card-hover rounded-2xl p-4 flex flex-col md:flex-row items-center gap-4 cursor-pointer" onclick="openLightbox('foto5.jpeg', 'Sosok Istimewa & Elegan')">
+                <div class="glass-card glass-card-hover rounded-2xl p-4 flex flex-col md:flex-row items-center gap-4 cursor-pointer" onclick="openLightbox('foto5.jpeg', 'Sosok Elegan dengan Karakter yang Menawan')">
                     <div class="w-full md:w-2/5 aspect-square rounded-xl overflow-hidden bg-purple-950/40">
                         <img src="foto5.jpeg" 
                              onerror="this.onerror=null; this.src='foto2.jpeg';" 
@@ -349,10 +349,10 @@
                              class="w-full h-full object-cover rounded-xl hover:scale-110 transition-transform duration-700">
                     </div>
                     <div class="w-full md:w-3/5 space-y-2 text-center md:text-left">
-                        <span class="text-[10px] font-cinzel text-roseGold/70 uppercase tracking-widest">Timeless Elegance</span>
+                        <span class="text-[10px] font-cinzel text-roseGold/70 uppercase tracking-widest">Timeless Grace</span>
                         <h3 class="font-cinzel text-roseGold font-bold text-base">Gaya & Karakter Unik</h3>
                         <p class="text-xs text-gray-300 leading-relaxed font-light">
-                            Keanggunan yang alami, sederhana namun senantiasa memancarkan daya pikat yang istimewa.
+                            Sederhana namun senantiasa memancarkan keindahan alami yang membuat siapapun menaruh hormat dan kagum.
                         </p>
                     </div>
                 </div>
@@ -364,20 +364,20 @@
         <!-- SECRET ENVELOPE / LETTER SECTION -->
         <section class="space-y-8 flex flex-col items-center">
             <div class="text-center space-y-2">
-                <span class="text-xs uppercase tracking-widest text-roseGold font-cinzel">Unspoken Thoughts</span>
-                <h2 class="text-3xl md:text-4xl font-cinzel font-bold text-white">Surat Rahasia untuk Habibah 💌</h2>
-                <p class="text-xs md:text-sm text-gray-400">Klik amplop di bawah ini untuk membuka dan membaca pesan spesial dari Rifqi.</p>
+                <span class="text-xs uppercase tracking-widest text-roseGold font-cinzel">From The Heart</span>
+                <h2 class="text-3xl md:text-4xl font-cinzel font-bold text-white">Surat Rahasia Untuk Habibah 💌</h2>
+                <p class="text-xs md:text-sm text-gray-400">Klik amplop di bawah ini untuk membuka dan membaca untaian kata paling tulus dari Rifqi.</p>
             </div>
 
             <div class="w-full flex justify-center">
                 <div class="envelope" onclick="openSecretLetter()">
                     <div class="absolute inset-0 flex flex-col items-center justify-center space-y-3 p-6 text-center">
-                        <div class="w-12 h-12 rounded-full bg-roseGold/10 border border-roseGold/40 flex items-center justify-center text-roseGold text-xl shadow-md">
+                        <div class="w-14 h-14 rounded-full bg-roseGold/15 border border-roseGold/50 flex items-center justify-center text-roseGold text-2xl shadow-lg animate-pulse">
                             ✉️
                         </div>
                         <div>
-                            <p class="font-cinzel text-roseGold font-semibold text-sm">Untuk: Habibah Khoirunnisa Ramadhan</p>
-                            <p class="text-xs text-gray-400 mt-1">Buka pesan penuh ketulusan di sini...</p>
+                            <p class="font-cinzel text-roseGold font-bold text-base">Untuk: Habibah Khoirunnisa Ramadhan</p>
+                            <p class="text-xs text-roseGold/70 mt-1 italic font-playfair">"Sebuah pesan tulus yang tersimpan rapi..."</p>
                         </div>
                     </div>
                 </div>
@@ -388,14 +388,14 @@
         <!-- MAKE A WISH SECTION -->
         <section class="glass-card rounded-3xl p-8 md:p-12 text-center space-y-6 border border-roseGold/20">
             <div class="space-y-2">
-                <h2 class="text-2xl md:text-3xl font-cinzel font-bold text-roseGold">Make a Wish 🌟</h2>
-                <p class="text-xs md:text-sm text-gray-300">Tuliskan impian atau doamu untuk usiamu yang baru, lalu terbangkan ke bintang-bintang.</p>
+                <h2 class="text-2xl md:text-3xl font-cinzel font-bold text-roseGold">Terbangkan Harapan 🌟</h2>
+                <p class="text-xs md:text-sm text-gray-300">Tuliskan impian atau doa terbesarmu, lalu biarkan bintang-bintang membawanya ke langit.</p>
             </div>
 
             <div class="max-w-xl mx-auto space-y-4">
-                <textarea id="wishInput" rows="3" placeholder="Tuliskan doamu di sini..." class="w-full p-4 rounded-xl glass-card border border-roseGold/30 text-xs md:text-sm text-white placeholder-gray-500 focus:outline-none focus:border-roseGold transition-colors resize-none"></textarea>
-                <button onclick="sendWish()" class="w-full md:w-auto px-8 py-3 rounded-full bg-gradient-to-r from-deepRose to-roseGold text-nightBg font-bold text-xs uppercase tracking-wider hover:opacity-90 transition-all shadow-lg">
-                    ✨ Terbangkan Doa & Harapan
+                <textarea id="wishInput" rows="3" placeholder="Tuliskan doa indahmu di sini..." class="w-full p-4 rounded-xl glass-card border border-roseGold/30 text-xs md:text-sm text-white placeholder-gray-500 focus:outline-none focus:border-roseGold transition-colors resize-none"></textarea>
+                <button onclick="sendWish()" class="w-full md:w-auto px-8 py-3.5 rounded-full bg-gradient-to-r from-deepRose via-roseGold to-deepRose text-nightBg font-bold text-xs uppercase tracking-wider hover:opacity-90 transition-all shadow-lg hover:scale-105">
+                    ✨ Terbangkan Doa Ke Langit Malam
                 </button>
             </div>
         </section>
@@ -415,28 +415,34 @@
 
     <!-- SECRET LETTER MODAL -->
     <div id="letterModal" class="fixed inset-0 bg-black/90 backdrop-blur-md z-50 hidden flex-col items-center justify-center p-4">
-        <div class="glass-card max-w-2xl w-full p-8 md:p-12 rounded-3xl border border-roseGold/40 space-y-6 relative max-h-[85vh] overflow-y-auto">
+        <div class="glass-card max-w-2xl w-full p-8 md:p-12 rounded-3xl border border-roseGold/50 space-y-6 relative max-h-[85vh] overflow-y-auto shadow-2xl">
             <button onclick="closeSecretLetter()" class="absolute top-4 right-6 text-gray-400 hover:text-white text-2xl">&times;</button>
             
-            <div class="text-center space-y-1">
-                <span class="text-xs font-cinzel text-roseGold uppercase tracking-widest">Pesan Tulus</span>
-                <h3 class="text-2xl font-cinzel font-bold text-white">Selamat Ulang Tahun, Habibah</h3>
+            <div class="text-center space-y-2 border-b border-roseGold/20 pb-4">
+                <span class="text-xs font-cinzel text-roseGold uppercase tracking-widest">A Letter From The Heart</span>
+                <h3 class="text-2xl md:text-3xl font-cinzel font-bold text-white">Untuk Habibah Khoirunnisa Ramadhan ✨</h3>
             </div>
 
-            <div class="space-y-4 text-xs md:text-sm text-gray-200 leading-relaxed font-light text-justify">
-                <p>
-                    Hari ini adalah hari yang begitu istimewa, hari di mana sosok yang anggun dan luar biasa dilahirkan ke dunia. Selamat ulang tahun untukmu, <strong class="text-roseGold">Habibah Khoirunnisa Ramadhan</strong>.
+            <div class="space-y-4 text-xs md:text-sm text-gray-200 leading-relaxed font-light text-justify font-playfair">
+                <p class="first-letter:text-3xl first-letter:font-cinzel first-letter:text-roseGold first-letter:mr-1">
+                    Selamat ulang tahun untuk seseorang yang selalu punya cara sederhana namun ajaib untuk membuat dunia terasa jauh lebih indah: <strong class="text-roseGold font-semibold">Habibah</strong>.
                 </p>
                 <p>
-                    Meskipun waktu dan jalan hidup terus berjalan, kebaikan hatimu, senyumanmu, serta setiap keindahan caramu memandang dunia akan selalu menjadi hal yang sangat dihargai dan dihormati.
+                    Mungkin hari-hari berlalu tanpa pernah kita sadari betapa cepatnya waktu berputar. Namun ada satu hal yang tak pernah berubah—kekagumanku pada caramu membawa diri, keanggunan senyumanmu, serta kehangatan tulus yang senantiasa memancar dari dalam dirimu.
                 </p>
                 <p>
-                    Semoga di usiamu yang baru ini, setiap langkahmu senantiasa dipenuhi kebahagiaan sejati, kesehatan, keberkahan, serta tercapainya segala cita-cita dan impian yang kamu harapkan. Tetaplah menjadi pribadi yang hangat dan mempesona.
+                    Terima kasih sudah lahir ke dunia dan tumbuh menjadi sosok wanita yang begitu luar biasa, kuat, dan memesona. Mengetahuimu dan melihatmu bahagia adalah salah satu hal yang selalu menenangkan hati.
                 </p>
-                <p class="text-right pt-4 italic font-sacramento text-xl text-roseGold">
-                    Dengan doa & harapan terbaik,<br>
-                    <span class="font-cinzel text-sm font-semibold">Rifqi Bilal Afriza</span>
+                <p>
+                    Di usiamu yang baru ini, doa paling tulus melangit untukmu: Semoga langkahmu selalu dituntun menuju kebahagiaan sejati, hatimu senantiasa dipeluk kedamaian, dan setiap impian indah yang kamu simpan dalam diam... perlahan menjadi kenyataan yang manis.
                 </p>
+                <p>
+                    Tetaplah menjadi Habibah yang senantiasa membawa sinar kebaikan untuk sekelilingmu. Jangan pernah ragu pada betapa berharganya dirimu.
+                </p>
+                <div class="pt-6 border-t border-roseGold/20 text-right space-y-1">
+                    <p class="italic text-gray-400 text-xs font-sans">Dengan segala kekaguman dan doa tulus,</p>
+                    <p class="font-sacramento text-2xl text-roseGold font-bold">Rifqi Bilal Afriza</p>
+                </div>
             </div>
         </div>
     </div>
@@ -456,7 +462,7 @@
         window.addEventListener('resize', resizeCanvas);
         resizeCanvas();
 
-        for(let i = 0; i < 120; i++) {
+        for(let i = 0; i < 140; i++) {
             stars.push({
                 x: Math.random() * canvas.width,
                 y: Math.random() * canvas.height,
@@ -481,7 +487,7 @@
         animateStars();
 
 
-        /* 2. Web Audio Synthesizer (Romantic Melodic Chords) */
+        /* 2. Web Audio Synthesizer - ROMANTIC HAPPY BIRTHDAY MELODY */
         let audioCtx = null;
         let isPlaying = false;
         let timerId = null;
@@ -492,37 +498,68 @@
                 if(!audioCtx) {
                     audioCtx = new (window.AudioContext || window.webkitAudioContext)();
                 }
-                playRomanticMelody();
+                playRomanticBirthdaySong();
                 isPlaying = true;
-                btnText.innerText = "MUSIK DIPUTAR 🎶";
+                btnText.innerText = "MUSIK BERPUTAR 🎶";
             } else {
                 if(timerId) clearInterval(timerId);
                 isPlaying = false;
-                btnText.innerText = "PUTAR MUSIK ROMANTIS 🎵";
+                btnText.innerText = "PUTAR MELODI ULANG TAHUN 🎼";
             }
         }
 
-        function playNote(freq, duration) {
+        function playPianoTone(freq, duration, type='sine', volume=0.18) {
             if(!audioCtx) return;
             const osc = audioCtx.createOscillator();
             const gain = audioCtx.createGain();
-            osc.type = 'sine';
-            osc.frequency.value = freq;
-            gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+            
+            osc.type = type;
+            osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+            
+            // Soft attack and smooth decay (Piano/Music Box Envelope)
+            gain.gain.setValueAtTime(0, audioCtx.currentTime);
+            gain.gain.linearRampToValueAtTime(volume, audioCtx.currentTime + 0.08);
             gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
+            
             osc.connect(gain);
             gain.connect(audioCtx.destination);
+            
             osc.start();
             osc.stop(audioCtx.currentTime + duration);
         }
 
-        function playRomanticMelody() {
-            const notes = [261.63, 329.63, 392.00, 523.25, 440.00, 349.23, 392.00, 329.63];
-            let idx = 0;
-            timerId = setInterval(() => {
-                playNote(notes[idx % notes.length], 2.5);
-                idx++;
-            }, 600);
+        function playRomanticBirthdaySong() {
+            // Frequencies for Happy Birthday notes in C Major (Slow, Soft Music Box style)
+            // G4, G4, A4, G4, C5, B4 ...
+            const birthdayMelody = [
+                { f: 392.00, d: 0.6 }, { f: 392.00, d: 0.4 }, { f: 440.00, d: 0.8 }, { f: 392.00, d: 0.8 }, { f: 523.25, d: 0.8 }, { f: 493.88, d: 1.4 },
+                { f: 392.00, d: 0.6 }, { f: 392.00, d: 0.4 }, { f: 440.00, d: 0.8 }, { f: 392.00, d: 0.8 }, { f: 587.33, d: 0.8 }, { f: 523.25, d: 1.4 },
+                { f: 392.00, d: 0.6 }, { f: 392.00, d: 0.4 }, { f: 783.99, d: 0.8 }, { f: 659.25, d: 0.8 }, { f: 523.25, d: 0.8 }, { f: 493.88, d: 0.8 }, { f: 440.00, d: 1.2 },
+                { f: 698.46, d: 0.6 }, { f: 698.46, d: 0.4 }, { f: 659.25, d: 0.8 }, { f: 523.25, d: 0.8 }, { f: 587.33, d: 0.8 }, { f: 523.25, d: 1.6 }
+            ];
+
+            const bassChords = [261.63, 329.63, 392.00, 440.00]; // Soft harmony backing
+
+            let noteIdx = 0;
+            
+            function step() {
+                if(!isPlaying) return;
+
+                let current = birthdayMelody[noteIdx % birthdayMelody.length];
+                // Play Main Melody
+                playPianoTone(current.f, current.d * 1.5, 'triangle', 0.2);
+                
+                // Play Soft Harmony Chord every 2 notes
+                if(noteIdx % 2 === 0) {
+                    let bassFreq = bassChords[(noteIdx / 2) % bassChords.length];
+                    playPianoTone(bassFreq / 2, 2.5, 'sine', 0.08);
+                }
+
+                noteIdx++;
+                timerId = setTimeout(step, current.d * 750); // Romantic slow tempo
+            }
+
+            step();
         }
 
 
@@ -535,15 +572,17 @@
             document.getElementById('flame').classList.add('off');
             document.getElementById('smoke').classList.remove('hidden');
             
-            // Confetti Blast
+            // Romantic Rose Gold Confetti Blast
             confetti({
-                particleCount: 100,
-                spread: 70,
+                particleCount: 120,
+                spread: 80,
                 origin: { y: 0.6 },
-                colors: ['#e8b4b8', '#f4c2c2', '#c97a8e', '#ffffff']
+                colors: ['#e8b4b8', '#f4c2c2', '#c97a8e', '#ffffff', '#ffd700']
             });
 
-            alert("✨ Semoga setiap doa dan harapan indahmu dikabulkan!");
+            setTimeout(() => {
+                alert("✨ Lilin telah terpadam! Semoga setiap doa dan harapan indah Habibah dikabulkan Tuhan.");
+            }, 300);
         }
 
         /* 4. Microphone Blow Sensor */
@@ -566,7 +605,7 @@
                     let sum = 0;
                     for (let i = 0; i < data.length; i++) sum += data[i];
                     let average = sum / data.length;
-                    if (average > 45 && !candleBlown) {
+                    if (average > 42 && !candleBlown) {
                         blowCandle();
                     }
                     if (!candleBlown) requestAnimationFrame(checkBlow);
@@ -594,10 +633,10 @@
         function openSecretLetter() {
             document.getElementById('letterModal').classList.add('modal-active');
             confetti({
-                particleCount: 50,
-                spread: 50,
+                particleCount: 60,
+                spread: 60,
                 origin: { y: 0.5 },
-                colors: ['#e8b4b8', '#ffffff']
+                colors: ['#e8b4b8', '#ffffff', '#f4c2c2']
             });
         }
 
@@ -615,14 +654,14 @@
             }
 
             confetti({
-                particleCount: 120,
+                particleCount: 140,
                 angle: 90,
                 spread: 100,
                 origin: { y: 0.8 },
                 colors: ['#e8b4b8', '#f4c2c2', '#ffffff', '#ffd700']
             });
 
-            alert("🌟 Harapanmu telah diterbangkan ke langit malam. Semoga menjadi kenyataan!");
+            alert("🌟 Doa indahmu telah diterbangkan ke langit malam. Semoga menjadi kenyataan!");
             input.value = "";
         }
     </script>
