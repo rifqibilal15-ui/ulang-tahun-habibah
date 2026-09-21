@@ -1,669 +1,1046 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Selamat Ulang Tahun, Habibah Khoirunnisa Ramadhan ✨</title>
-    
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Canvas Confetti Library -->
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Sacramento&family=Playfair+Display:ital,wght@0,600;1,400;1,600&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Selamat Ulang Tahun, Habibah Khoirunnisa Ramadhan ✨</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Cinzel:wght@500;700&family=Great+Vibes&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  
+  <style>
+    :root {
+      --bg-dark: #0a0612;
+      --card-bg: rgba(22, 14, 38, 0.65);
+      --card-border: rgba(236, 172, 206, 0.25);
+      --primary-pink: #f472b6;
+      --deep-rose: #e11d48;
+      --gold: #fbbf24;
+      --soft-white: #f8fafc;
+      --text-sub: #cbd5e1;
+    }
 
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        nightBg: '#09070f',
-                        cardBg: 'rgba(23, 18, 38, 0.65)',
-                        roseGold: '#e8b4b8',
-                        roseGoldGlow: '#f4c2c2',
-                        accentPurple: '#2d1b4e',
-                        deepRose: '#c97a8e'
-                    },
-                    fontFamily: {
-                        cinzel: ['Cinzel', 'serif'],
-                        playfair: ['Playfair Display', 'serif'],
-                        sacramento: ['Sacramento', 'cursive'],
-                        sans: ['Plus Jakarta Sans', 'sans-serif']
-                    }
-                }
-            }
-        }
-    </script>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      scroll-behavior: smooth;
+    }
 
-    <style>
-        body {
-            background-color: #09070f;
-            color: #f3e8ee;
-            overflow-x: hidden;
-            font-family: 'Plus Jakarta Sans', sans-serif;
-        }
+    body {
+      background-color: var(--bg-dark);
+      color: var(--soft-white);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      overflow-x: hidden;
+      min-height: 100vh;
+      position: relative;
+    }
 
-        /* Glassmorphism Effect */
-        .glass-card {
-            background: rgba(25, 18, 36, 0.55);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(232, 180, 184, 0.18);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
-        }
+    /* Background Particle Canvas */
+    #bgCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
 
-        .glass-card-hover {
-            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-        .glass-card-hover:hover {
-            transform: translateY(-8px) scale(1.02);
-            border-color: rgba(232, 180, 184, 0.5);
-            box-shadow: 0 15px 35px rgba(232, 180, 184, 0.25);
-        }
+    /* ENTRANCE MODAL */
+    #entranceOverlay {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at center, #1e102d 0%, #08030d 100%);
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 24px;
+      transition: opacity 1s ease, visibility 1s ease;
+    }
 
-        /* Glowing Text & Borders */
-        .glow-text {
-            text-shadow: 0 0 15px rgba(232, 180, 184, 0.6), 0 0 30px rgba(201, 122, 142, 0.4);
-        }
-        .glow-avatar {
-            box-shadow: 0 0 25px rgba(232, 180, 184, 0.5), 0 0 50px rgba(45, 27, 78, 0.8);
-        }
+    #entranceOverlay.hidden {
+      opacity: 0;
+      visibility: hidden;
+    }
 
-        /* Background Stars Canvas */
-        #starsCanvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 0;
-        }
+    .envelope-box {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(244, 114, 182, 0.3);
+      padding: 40px 28px;
+      border-radius: 24px;
+      backdrop-filter: blur(15px);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), 0 0 30px rgba(244, 114, 182, 0.15);
+      max-width: 440px;
+      width: 100%;
+      animation: pulseGlow 3s infinite ease-in-out;
+    }
 
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #09070f;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #2d1b4e;
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #e8b4b8;
-        }
+    @keyframes pulseGlow {
+      0%, 100% { box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), 0 0 20px rgba(244, 114, 182, 0.2); }
+      50% { box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), 0 0 40px rgba(244, 114, 182, 0.4); }
+    }
 
-        /* Envelope Styles */
-        .envelope {
-            position: relative;
-            width: 100%;
-            max-width: 480px;
-            height: 260px;
-            background: linear-gradient(135deg, #1e152a 0%, #2d1a38 100%);
-            border-radius: 16px;
-            border: 1px solid rgba(232, 180, 184, 0.35);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.6), inset 0 0 20px rgba(232,180,184,0.05);
-            cursor: pointer;
-            transition: all 0.5s ease;
-        }
-        .envelope:hover {
-            transform: translateY(-8px);
-            border-color: rgba(232, 180, 184, 0.7);
-            box-shadow: 0 25px 50px rgba(232, 180, 184, 0.2);
-        }
+    .envelope-icon {
+      font-size: 60px;
+      margin-bottom: 16px;
+      display: inline-block;
+      animation: bounce 2s infinite ease-in-out;
+    }
 
-        /* Candle Flame Animation */
-        .flame {
-            width: 14px;
-            height: 24px;
-            background: linear-gradient(to top, #ff9d00, #ffeb3b, #ffffff);
-            border-radius: 50% 50% 20% 20%;
-            box-shadow: 0 0 15px #ff9d00, 0 0 25px #ffeb3b;
-            animation: flicker 0.1s infinite alternate;
-            transform-origin: center bottom;
-        }
-        .flame.off {
-            display: none;
-        }
-        @keyframes flicker {
-            0% { transform: scale(1) rotate(-2deg); }
-            100% { transform: scale(1.08) rotate(2deg); }
-        }
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
 
-        .smoke {
-            width: 6px;
-            height: 20px;
-            background: rgba(200, 200, 200, 0.5);
-            border-radius: 50%;
-            animation: rise 1.5s ease-out forwards;
-        }
-        @keyframes rise {
-            0% { opacity: 0.8; transform: translateY(0) scale(1); }
-            100% { opacity: 0; transform: translateY(-40px) scale(3); filter: blur(4px); }
-        }
+    .entrance-title {
+      font-family: 'Great Vibes', cursive;
+      font-size: 2.8rem;
+      color: var(--primary-pink);
+      margin-bottom: 10px;
+      text-shadow: 0 0 15px rgba(244, 114, 182, 0.4);
+    }
 
-        /* Lightbox & Modal */
-        .modal-active {
-            display: flex !important;
-            animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.95); }
-            to { opacity: 1; transform: scale(1); }
-        }
-    </style>
+    .entrance-sub {
+      color: var(--text-sub);
+      font-size: 0.95rem;
+      margin-bottom: 28px;
+      line-height: 1.6;
+    }
+
+    .btn-open {
+      background: linear-gradient(135deg, #f472b6 0%, #e11d48 100%);
+      color: #fff;
+      border: none;
+      padding: 16px 36px;
+      font-size: 1.05rem;
+      font-weight: 600;
+      border-radius: 50px;
+      cursor: pointer;
+      box-shadow: 0 10px 25px rgba(225, 29, 72, 0.4);
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn-open:hover {
+      transform: translateY(-3px) scale(1.03);
+      box-shadow: 0 15px 35px rgba(225, 29, 72, 0.6);
+    }
+
+    /* MAIN CONTAINER */
+    .container {
+      position: relative;
+      z-index: 1;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 40px 20px 100px;
+    }
+
+    /* MUSIC FLOATING CONTROL */
+    .music-control-btn {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 1000;
+      background: rgba(22, 14, 38, 0.8);
+      border: 1px solid rgba(244, 114, 182, 0.4);
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 30px;
+      backdrop-filter: blur(10px);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+      transition: all 0.3s ease;
+    }
+
+    .music-control-btn:hover {
+      background: rgba(244, 114, 182, 0.2);
+      border-color: var(--primary-pink);
+    }
+
+    .disc-icon {
+      display: inline-block;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      border: 2px solid var(--primary-pink);
+      border-top-color: transparent;
+    }
+
+    .disc-icon.playing {
+      animation: spin 2s linear infinite;
+    }
+
+    @keyframes spin {
+      100% { transform: rotate(360deg); }
+    }
+
+    /* HEADER SECTION */
+    .header-section {
+      text-align: center;
+      margin-bottom: 60px;
+      padding-top: 20px;
+    }
+
+    .greeting-tag {
+      display: inline-block;
+      background: rgba(244, 114, 182, 0.12);
+      border: 1px solid rgba(244, 114, 182, 0.3);
+      color: var(--primary-pink);
+      padding: 6px 20px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    .main-title {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(2.2rem, 5vw, 3.6rem);
+      background: linear-gradient(135deg, #ffffff 30%, #f472b6 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 12px;
+      line-height: 1.2;
+    }
+
+    .sub-title {
+      font-family: 'Great Vibes', cursive;
+      font-size: clamp(1.8rem, 4vw, 2.5rem);
+      color: var(--gold);
+      text-shadow: 0 0 10px rgba(251, 191, 36, 0.3);
+    }
+
+    .sender-tag {
+      font-size: 0.95rem;
+      color: var(--text-sub);
+      margin-top: 10px;
+      font-style: italic;
+    }
+
+    /* SURAT SECTION (LETTER CARD) */
+    .letter-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 28px;
+      padding: 40px 32px;
+      backdrop-filter: blur(16px);
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      margin-bottom: 70px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .letter-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, transparent, var(--primary-pink), var(--gold), transparent);
+    }
+
+    .letter-header {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 28px;
+      border-bottom: 1px dashed rgba(244, 114, 182, 0.2);
+      padding-bottom: 18px;
+    }
+
+    .letter-header-icon {
+      font-size: 2rem;
+    }
+
+    .letter-header-text h3 {
+      font-family: 'Cinzel', serif;
+      font-size: 1.4rem;
+      color: var(--primary-pink);
+    }
+
+    .letter-header-text p {
+      font-size: 0.85rem;
+      color: var(--text-sub);
+    }
+
+    .letter-body {
+      font-size: 1.05rem;
+      line-height: 1.9;
+      color: #e2e8f0;
+      white-space: pre-line;
+      text-align: justify;
+    }
+
+    .letter-body p {
+      margin-bottom: 18px;
+    }
+
+    .letter-highlight {
+      color: var(--primary-pink);
+      font-weight: 600;
+    }
+
+    .letter-gold {
+      color: var(--gold);
+      font-weight: 600;
+    }
+
+    .letter-signature {
+      margin-top: 35px;
+      text-align: right;
+      font-family: 'Caveat', cursive;
+      font-size: 1.8rem;
+      color: var(--primary-pink);
+    }
+
+    /* GALLERY SECTION (POLAROIDS) */
+    .section-title {
+      text-align: center;
+      font-family: 'Cinzel', serif;
+      font-size: 1.8rem;
+      color: #fff;
+      margin-bottom: 40px;
+      position: relative;
+    }
+
+    .section-title::after {
+      content: '';
+      display: block;
+      width: 60px;
+      height: 3px;
+      background: var(--primary-pink);
+      margin: 10px auto 0;
+      border-radius: 2px;
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 30px;
+      margin-bottom: 80px;
+    }
+
+    .polaroid {
+      background: #ffffff;
+      padding: 14px 14px 24px 14px;
+      border-radius: 12px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      cursor: pointer;
+      position: relative;
+    }
+
+    .polaroid:nth-child(1) { transform: rotate(-3deg); }
+    .polaroid:nth-child(2) { transform: rotate(2deg); }
+    .polaroid:nth-child(3) { transform: rotate(-2deg); }
+
+    .polaroid:hover {
+      transform: translateY(-10px) rotate(0deg) scale(1.03);
+      z-index: 10;
+      box-shadow: 0 25px 45px rgba(244, 114, 182, 0.3);
+    }
+
+    .polaroid-img-box {
+      width: 100%;
+      height: 320px;
+      border-radius: 8px;
+      overflow: hidden;
+      background: #111;
+      position: relative;
+    }
+
+    .polaroid-img-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      transition: transform 0.5s ease;
+    }
+
+    .polaroid:hover .polaroid-img-box img {
+      transform: scale(1.08);
+    }
+
+    .polaroid-caption {
+      margin-top: 16px;
+      text-align: center;
+      font-family: 'Caveat', cursive;
+      font-size: 1.35rem;
+      color: #1e1b4b;
+      font-weight: 700;
+    }
+
+    /* INTERACTIVE CAKE & CANDLE */
+    .cake-section {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 28px;
+      padding: 50px 20px;
+      text-align: center;
+      margin-bottom: 80px;
+      backdrop-filter: blur(16px);
+      position: relative;
+    }
+
+    .cake-container {
+      position: relative;
+      width: 180px;
+      height: 180px;
+      margin: 0 auto 30px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+    }
+
+    /* SVG Cake Base */
+    .cake-svg {
+      width: 160px;
+      height: 120px;
+    }
+
+    /* Candle Flame */
+    .candle {
+      position: absolute;
+      top: 15px;
+      width: 12px;
+      height: 45px;
+      background: linear-gradient(to bottom, #fde047, #f97316);
+      border-radius: 6px;
+      z-index: 2;
+    }
+
+    .flame {
+      position: absolute;
+      top: -22px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 16px;
+      height: 24px;
+      background: radial-gradient(ellipse at bottom, #fef08a 0%, #f97316 60%, transparent 100%);
+      border-radius: 50% 50% 35% 35%;
+      box-shadow: 0 0 20px #fde047, 0 0 35px #f97316;
+      animation: flicker 0.15s infinite alternate ease-in-out;
+      transition: all 0.5s ease;
+    }
+
+    .flame.off {
+      opacity: 0;
+      transform: translateX(-50%) scale(0);
+    }
+
+    @keyframes flicker {
+      0% { transform: translateX(-50%) rotate(-2deg) scale(1); }
+      100% { transform: translateX(-50%) rotate(2deg) scale(1.08); }
+    }
+
+    .smoke {
+      position: absolute;
+      top: -30px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 8px;
+      height: 20px;
+      background: rgba(200, 200, 200, 0.6);
+      border-radius: 10px;
+      opacity: 0;
+      filter: blur(4px);
+    }
+
+    .smoke.active {
+      animation: smokeRise 2s forwards ease-out;
+    }
+
+    @keyframes smokeRise {
+      0% { opacity: 0.8; transform: translate(-50%, 0) scale(1); }
+      100% { opacity: 0; transform: translate(-50%, -60px) scale(3); }
+    }
+
+    .btn-blow {
+      background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+      color: #0f172a;
+      border: none;
+      padding: 14px 32px;
+      font-size: 1rem;
+      font-weight: 700;
+      border-radius: 50px;
+      cursor: pointer;
+      box-shadow: 0 10px 25px rgba(251, 191, 36, 0.3);
+      transition: all 0.3s ease;
+    }
+
+    .btn-blow:hover {
+      transform: scale(1.05);
+      box-shadow: 0 15px 35px rgba(251, 191, 36, 0.5);
+    }
+
+    .wish-result {
+      margin-top: 20px;
+      font-size: 1.15rem;
+      color: var(--primary-pink);
+      font-weight: 600;
+      min-height: 30px;
+      opacity: 0;
+      transition: opacity 0.8s ease;
+    }
+
+    .wish-result.show {
+      opacity: 1;
+    }
+
+    /* PRAYER / CARDS SECTION */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+      margin-bottom: 80px;
+    }
+
+    .flip-card {
+      background-color: transparent;
+      height: 200px;
+      perspective: 1000px;
+      cursor: pointer;
+    }
+
+    .flip-card-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      text-align: center;
+      transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      transform-style: preserve-3d;
+    }
+
+    .flip-card.flipped .flip-card-inner {
+      transform: rotateY(180deg);
+    }
+
+    .flip-card-front, .flip-card-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+      border-radius: 20px;
+      padding: 24px 18px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--card-border);
+    }
+
+    .flip-card-front {
+      background: var(--card-bg);
+      backdrop-filter: blur(10px);
+      color: #fff;
+    }
+
+    .flip-card-front .icon {
+      font-size: 2.5rem;
+      margin-bottom: 12px;
+    }
+
+    .flip-card-front h4 {
+      font-family: 'Cinzel', serif;
+      font-size: 1.1rem;
+      color: var(--primary-pink);
+    }
+
+    .flip-card-front p {
+      font-size: 0.75rem;
+      color: var(--text-sub);
+      margin-top: 6px;
+    }
+
+    .flip-card-back {
+      background: linear-gradient(135deg, rgba(244, 114, 182, 0.2) 0%, rgba(30, 16, 45, 0.95) 100%);
+      color: #fff;
+      transform: rotateY(180deg);
+      border-color: var(--primary-pink);
+    }
+
+    .flip-card-back p {
+      font-size: 0.92rem;
+      line-height: 1.6;
+      color: #f1f5f9;
+    }
+
+    /* FOOTER / WA BUTTON */
+    .footer-section {
+      text-align: center;
+      padding-top: 20px;
+    }
+
+    .btn-whatsapp {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: #25d366;
+      color: #fff;
+      text-decoration: none;
+      padding: 16px 36px;
+      font-weight: 700;
+      border-radius: 50px;
+      font-size: 1.05rem;
+      box-shadow: 0 10px 25px rgba(37, 211, 102, 0.3);
+      transition: all 0.3s ease;
+    }
+
+    .btn-whatsapp:hover {
+      transform: translateY(-3px) scale(1.03);
+      box-shadow: 0 15px 35px rgba(37, 211, 102, 0.5);
+    }
+
+    .footer-note {
+      margin-top: 24px;
+      color: var(--text-sub);
+      font-size: 0.85rem;
+    }
+
+    /* LIGHTBOX FOR FOTO ZOOM */
+    #lightbox {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.9);
+      z-index: 10000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+      padding: 20px;
+    }
+
+    #lightbox.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    #lightbox img {
+      max-width: 90%;
+      max-height: 85vh;
+      border-radius: 12px;
+      box-shadow: 0 0 30px rgba(244, 114, 182, 0.5);
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 640px) {
+      .letter-card {
+        padding: 28px 20px;
+      }
+      .letter-body {
+        font-size: 0.98rem;
+        line-height: 1.8;
+      }
+      .polaroid-img-box {
+        height: 280px;
+      }
+    }
+  </style>
 </head>
-<body class="relative min-h-screen">
+<body>
 
-    <!-- Background Stars Canvas -->
-    <canvas id="starsCanvas"></canvas>
+  <!-- BACKGROUND CANVAS -->
+  <canvas id="bgCanvas"></canvas>
 
-    <!-- Top Music Control Bar -->
-    <header class="fixed top-0 left-0 w-full z-50 p-4 flex justify-between items-center bg-gradient-to-b from-[#09070f] via-[#09070f]/80 to-transparent backdrop-blur-sm">
-        <div class="flex items-center space-x-2">
-            <span class="text-xs uppercase tracking-widest text-roseGold/80 font-cinzel">A Symphony for Habibah</span>
-        </div>
-        <button id="musicToggleBtn" onclick="toggleAudio()" class="glass-card px-5 py-2.5 rounded-full flex items-center space-x-2.5 text-xs font-semibold text-roseGold border border-roseGold/40 hover:bg-roseGold/20 transition-all shadow-lg hover:scale-105">
-            <svg id="musicIcon" class="w-4 h-4 animate-spin-slow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 .895-2 3-2 3 .895 3 2zm12 0c0 1.105-1.343 2-3 2s-3-.895-3-2 .895-2 3-2 3 .895 3 2zM9 10l12-3"></path>
-            </svg>
-            <span id="musicText">PUTAR MELODI ULANG TAHUN 🎼</span>
-        </button>
+  <!-- BACKGROUND AUDIO -->
+  <!-- Romantic piano music loop fallback -->
+  <audio id="bgMusic" loop preload="auto">
+    <source src="music.mp3" type="audio/mpeg">
+    <source src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=romantic-piano-112199.mp3" type="audio/mpeg">
+  </audio>
+
+  <!-- MUSIC CONTROL BUTTON -->
+  <button class="music-control-btn" id="musicBtn" onclick="toggleMusic()">
+    <span class="disc-icon" id="discIcon"></span>
+    <span id="musicText">Putar Musik 🎵</span>
+  </button>
+
+  <!-- ENTRANCE OVERLAY -->
+  <div id="entranceOverlay">
+    <div class="envelope-box">
+      <div class="envelope-icon">💌</div>
+      <h1 class="entrance-title">Pesan Khusus</h1>
+      <p class="entrance-sub">
+        Sebuah halaman kecil yang dibuat khusus untuk merayakan hari kelahiranmu.<br>
+        Buka surat ini dengan penuh senyuman...
+      </p>
+      <button class="btn-open" onclick="startExperience()">
+        <span>Buka Surat dari Rifqi</span>
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="container">
+    
+    <!-- HEADER -->
+    <header class="header-section">
+      <div class="greeting-tag">Selamat Ulang Tahun</div>
+      <h1 class="main-title">Habibah Khoirunnisa Ramadhan</h1>
+      <div class="sub-title">Semoga Pertambahan Usiamu Diberkati ✨</div>
+      <p class="sender-tag">Dirancang dengan tulus oleh Rifqi Bilal Afriza</p>
     </header>
 
-    <main class="relative z-10 max-w-5xl mx-auto px-4 pt-28 pb-20 space-y-24">
-
-        <!-- HERO SECTION -->
-        <section class="text-center space-y-8 flex flex-col items-center justify-center">
-            
-            <!-- Avatar Frame -->
-            <div class="relative group">
-                <div class="w-44 h-44 md:w-52 md:h-52 rounded-full p-1 bg-gradient-to-tr from-roseGold via-deepRose to-purple-900 glow-avatar transition-transform duration-500 group-hover:scale-105">
-                    <img src="foto4.jpeg" 
-                         onerror="this.onerror=null; this.src='foto1.jpeg';" 
-                         alt="Habibah Khoirunnisa Ramadhan" 
-                         class="w-full h-full object-cover rounded-full border-2 border-nightBg">
-                </div>
-                <div class="absolute -bottom-2 right-4 bg-accentPurple/90 border border-roseGold/40 text-roseGold text-xs px-3.5 py-1 rounded-full backdrop-blur-md shadow-md font-cinzel">
-                    ✨ The Queen of Today
-                </div>
-            </div>
-
-            <!-- Title & Subtitle -->
-            <div class="space-y-4 max-w-2xl">
-                <span class="inline-block px-4 py-1.5 rounded-full glass-card text-xs tracking-widest text-roseGold uppercase font-cinzel">
-                    Happy Birthday, Beautiful Soul
-                </span>
-                <h1 class="text-4xl md:text-6xl font-cinzel font-bold text-transparent bg-clip-text bg-gradient-to-r from-roseGold via-white to-roseGoldGlow glow-text leading-tight">
-                    Selamat Ulang Tahun,<br>Habibah Khoirunnisa Ramadhan
-                </h1>
-                <p class="text-sm md:text-base text-roseGold/90 font-light italic leading-relaxed font-playfair">
-                    "Di antara jutaan insan, hadirmu adalah salah satu hal terindah. Hari ini, dunia tersenyum menyambut bertambahnya usiamu yang penuh keanggunan."
-                </p>
-            </div>
-
-            <!-- Sender Tag -->
-            <div class="glass-card px-6 py-2.5 rounded-full inline-flex items-center space-x-2 border border-roseGold/30">
-                <span class="text-xs text-gray-300">Dirayakan penuh kekaguman oleh:</span>
-                <span class="text-xs font-semibold text-roseGold font-cinzel tracking-wider">Rifqi Bilal Afriza</span>
-            </div>
-
-        </section>
-
-
-        <!-- INTERACTIVE BIRTHDAY CAKE SECTION -->
-        <section class="glass-card rounded-3xl p-8 md:p-12 text-center space-y-8 border border-roseGold/20 relative overflow-hidden">
-            <div class="space-y-2">
-                <h2 class="text-2xl md:text-3xl font-cinzel font-bold text-roseGold">Make a Wish & Tiup Lilinnya 🎂</h2>
-                <p class="text-xs md:text-sm text-gray-300">Pejamkan mata sejenak, utarakan harapan terbaikmu, lalu klik tombol atau tiup mikrofonmu!</p>
-            </div>
-
-            <!-- 3D CSS Cake Illustration -->
-            <div class="py-6 flex justify-center items-center">
-                <div class="relative w-56 h-48 flex flex-col items-center justify-end">
-                    
-                    <!-- Candle -->
-                    <div id="candle" class="relative flex flex-col items-center cursor-pointer mb-[-4px] z-20">
-                        <div id="flame" class="flame"></div>
-                        <div id="smoke" class="smoke hidden"></div>
-                        <div class="w-3 h-12 bg-gradient-to-b from-roseGold to-pink-300 rounded-t-sm shadow-sm"></div>
-                    </div>
-
-                    <!-- Cake Layers -->
-                    <div class="w-40 h-14 bg-gradient-to-r from-deepRose via-roseGold to-deepRose rounded-t-2xl border-b-4 border-purple-950 relative shadow-inner">
-                        <div class="absolute top-0 left-0 w-full h-4 bg-white/30 rounded-t-2xl flex justify-around items-center px-2">
-                            <span class="w-2 h-2 rounded-full bg-white"></span>
-                            <span class="w-2 h-2 rounded-full bg-white"></span>
-                            <span class="w-2 h-2 rounded-full bg-white"></span>
-                            <span class="w-2 h-2 rounded-full bg-white"></span>
-                        </div>
-                    </div>
-                    <div class="w-52 h-16 bg-gradient-to-r from-accentPurple via-[#3e2768] to-accentPurple rounded-b-2xl border-t-2 border-roseGold/40 shadow-2xl relative">
-                        <div class="absolute bottom-2 left-0 w-full text-center text-[10px] font-cinzel tracking-widest text-roseGold/80">
-                            HABIBAH KHOIRUNNISA
-                        </div>
-                    </div>
-                    <!-- Plate -->
-                    <div class="w-64 h-4 bg-white/20 rounded-full blur-[1px] shadow-lg"></div>
-                </div>
-            </div>
-
-            <!-- Control Buttons -->
-            <div class="flex flex-wrap justify-center gap-4">
-                <button onclick="blowCandle()" class="px-7 py-3 rounded-full bg-gradient-to-r from-deepRose via-roseGold to-deepRose text-nightBg font-bold text-xs tracking-wider uppercase hover:opacity-90 transition-all shadow-lg hover:scale-105">
-                    💨 Tiup Lilin Sekarang
-                </button>
-                <button id="micBtn" onclick="initMic()" class="px-7 py-3 rounded-full glass-card border border-roseGold/40 text-roseGold text-xs tracking-wider uppercase hover:bg-roseGold/20 transition-all shadow-lg">
-                    🎤 Sensor Tiupan Mikrofon
-                </button>
-            </div>
-        </section>
-
-
-        <!-- PHOTO GALLERY SECTION -->
-        <section class="space-y-8">
-            <div class="text-center space-y-2">
-                <span class="text-xs uppercase tracking-widest text-roseGold font-cinzel">Memory Gallery</span>
-                <h2 class="text-3xl md:text-4xl font-cinzel font-bold text-white">Pesona Yang Tak Pernah Pudar 📸</h2>
-                <p class="text-xs md:text-sm text-gray-400">Klik pada foto untuk menikmati potret anggun Habibah lebih jelas.</p>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                
-                <!-- Photo Card 1 -->
-                <div class="glass-card glass-card-hover rounded-2xl p-4 cursor-pointer" onclick="openLightbox('foto1.jpeg', 'Pancaran Keanggunan yang Menenangkan Hati')">
-                    <div class="aspect-[3/4] rounded-xl overflow-hidden mb-4 bg-purple-950/40 relative">
-                        <img src="foto1.jpeg" 
-                             onerror="this.onerror=null; this.src='foto4.jpeg';" 
-                             alt="Habibah Photo 1" 
-                             class="w-full h-full object-cover rounded-xl hover:scale-110 transition-transform duration-700">
-                    </div>
-                    <div class="text-center space-y-1">
-                        <h3 class="font-cinzel text-roseGold font-semibold text-sm">Anggun & Tulus</h3>
-                        <p class="text-xs text-gray-400 italic font-playfair">Pancaran kehangatan yang tak pernah gagal membuat kagum.</p>
-                    </div>
-                </div>
-
-                <!-- Photo Card 2 -->
-                <div class="glass-card glass-card-hover rounded-2xl p-4 cursor-pointer" onclick="openLightbox('foto2.jpeg', 'Binar Senyuman yang Menghiasi Malam')">
-                    <div class="aspect-[3/4] rounded-xl overflow-hidden mb-4 bg-purple-950/40 relative">
-                        <img src="foto2.jpeg" 
-                             onerror="this.onerror=null; this.src='foto4.jpeg';" 
-                             alt="Habibah Photo 2" 
-                             class="w-full h-full object-cover rounded-xl hover:scale-110 transition-transform duration-700">
-                    </div>
-                    <div class="text-center space-y-1">
-                        <h3 class="font-cinzel text-roseGold font-semibold text-sm">Senyum Manis</h3>
-                        <p class="text-xs text-gray-400 italic font-playfair">Sinar kebahagiaan yang selalu menghidupkan suasana.</p>
-                    </div>
-                </div>
-
-                <!-- Photo Card 3 -->
-                <div class="glass-card glass-card-hover rounded-2xl p-4 cursor-pointer" onclick="openLightbox('foto3.jpeg', 'Keceriaan Alami yang Penuh Energi Positif')">
-                    <div class="aspect-[3/4] rounded-xl overflow-hidden mb-4 bg-purple-950/40 relative">
-                        <img src="foto3.jpeg" 
-                             onerror="this.onerror=null; this.src='foto4.jpeg';" 
-                             alt="Habibah Photo 3" 
-                             class="w-full h-full object-cover rounded-xl hover:scale-110 transition-transform duration-700">
-                    </div>
-                    <div class="text-center space-y-1">
-                        <h3 class="font-cinzel text-roseGold font-semibold text-sm">Momen Ceria</h3>
-                        <p class="text-xs text-gray-400 italic font-playfair">Kepribadian hangat yang selalu menyenangkan.</p>
-                    </div>
-                </div>
-
-            </div>
-
-            <!-- Extra Bottom Gallery Grid (Photo 4 & 5) -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
-                
-                <!-- Photo Card 4 -->
-                <div class="glass-card glass-card-hover rounded-2xl p-4 flex flex-col md:flex-row items-center gap-4 cursor-pointer" onclick="openLightbox('foto4.jpeg', 'Tatap Menenangkan yang Selalu Berkesan Dalam')">
-                    <div class="w-full md:w-2/5 aspect-square rounded-xl overflow-hidden bg-purple-950/40">
-                        <img src="foto4.jpeg" 
-                             onerror="this.onerror=null; this.src='foto1.jpeg';" 
-                             alt="Habibah Photo 4" 
-                             class="w-full h-full object-cover rounded-xl hover:scale-110 transition-transform duration-700">
-                    </div>
-                    <div class="w-full md:w-3/5 space-y-2 text-center md:text-left">
-                        <span class="text-[10px] font-cinzel text-roseGold/70 uppercase tracking-widest">Special Highlight</span>
-                        <h3 class="font-cinzel text-roseGold font-bold text-base">Tatapan Menenangkan</h3>
-                        <p class="text-xs text-gray-300 leading-relaxed font-light">
-                            Ada kedamaian tersendiri setiap kali menatap senyum dan ketulusanmu. Sosok yang selalu istimewa.
-                        </p>
-                    </div>
-                </div>
-
-                <!-- Photo Card 5 -->
-                <div class="glass-card glass-card-hover rounded-2xl p-4 flex flex-col md:flex-row items-center gap-4 cursor-pointer" onclick="openLightbox('foto5.jpeg', 'Sosok Elegan dengan Karakter yang Menawan')">
-                    <div class="w-full md:w-2/5 aspect-square rounded-xl overflow-hidden bg-purple-950/40">
-                        <img src="foto5.jpeg" 
-                             onerror="this.onerror=null; this.src='foto2.jpeg';" 
-                             alt="Habibah Photo 5" 
-                             class="w-full h-full object-cover rounded-xl hover:scale-110 transition-transform duration-700">
-                    </div>
-                    <div class="w-full md:w-3/5 space-y-2 text-center md:text-left">
-                        <span class="text-[10px] font-cinzel text-roseGold/70 uppercase tracking-widest">Timeless Grace</span>
-                        <h3 class="font-cinzel text-roseGold font-bold text-base">Gaya & Karakter Unik</h3>
-                        <p class="text-xs text-gray-300 leading-relaxed font-light">
-                            Sederhana namun senantiasa memancarkan keindahan alami yang membuat siapapun menaruh hormat dan kagum.
-                        </p>
-                    </div>
-                </div>
-
-            </div>
-        </section>
-
-
-        <!-- SECRET ENVELOPE / LETTER SECTION -->
-        <section class="space-y-8 flex flex-col items-center">
-            <div class="text-center space-y-2">
-                <span class="text-xs uppercase tracking-widest text-roseGold font-cinzel">From The Heart</span>
-                <h2 class="text-3xl md:text-4xl font-cinzel font-bold text-white">Surat Rahasia Untuk Habibah 💌</h2>
-                <p class="text-xs md:text-sm text-gray-400">Klik amplop di bawah ini untuk membuka dan membaca untaian kata paling tulus dari Rifqi.</p>
-            </div>
-
-            <div class="w-full flex justify-center">
-                <div class="envelope" onclick="openSecretLetter()">
-                    <div class="absolute inset-0 flex flex-col items-center justify-center space-y-3 p-6 text-center">
-                        <div class="w-14 h-14 rounded-full bg-roseGold/15 border border-roseGold/50 flex items-center justify-center text-roseGold text-2xl shadow-lg animate-pulse">
-                            ✉️
-                        </div>
-                        <div>
-                            <p class="font-cinzel text-roseGold font-bold text-base">Untuk: Habibah Khoirunnisa Ramadhan</p>
-                            <p class="text-xs text-roseGold/70 mt-1 italic font-playfair">"Sebuah pesan tulus yang tersimpan rapi..."</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-
-        <!-- MAKE A WISH SECTION -->
-        <section class="glass-card rounded-3xl p-8 md:p-12 text-center space-y-6 border border-roseGold/20">
-            <div class="space-y-2">
-                <h2 class="text-2xl md:text-3xl font-cinzel font-bold text-roseGold">Terbangkan Harapan 🌟</h2>
-                <p class="text-xs md:text-sm text-gray-300">Tuliskan impian atau doa terbesarmu, lalu biarkan bintang-bintang membawanya ke langit.</p>
-            </div>
-
-            <div class="max-w-xl mx-auto space-y-4">
-                <textarea id="wishInput" rows="3" placeholder="Tuliskan doa indahmu di sini..." class="w-full p-4 rounded-xl glass-card border border-roseGold/30 text-xs md:text-sm text-white placeholder-gray-500 focus:outline-none focus:border-roseGold transition-colors resize-none"></textarea>
-                <button onclick="sendWish()" class="w-full md:w-auto px-8 py-3.5 rounded-full bg-gradient-to-r from-deepRose via-roseGold to-deepRose text-nightBg font-bold text-xs uppercase tracking-wider hover:opacity-90 transition-all shadow-lg hover:scale-105">
-                    ✨ Terbangkan Doa Ke Langit Malam
-                </button>
-            </div>
-        </section>
-
-    </main>
-
-
-    <!-- LIGHTBOX MODAL FOR PHOTOS -->
-    <div id="lightboxModal" class="fixed inset-0 bg-black/90 backdrop-blur-md z-50 hidden flex-col items-center justify-center p-4">
-        <button onclick="closeLightbox()" class="absolute top-6 right-6 text-white text-3xl font-bold hover:text-roseGold transition-colors">&times;</button>
-        <div class="max-w-2xl w-full space-y-4 text-center">
-            <img id="lightboxImg" src="" alt="Full view" class="max-h-[75vh] mx-auto rounded-2xl border border-roseGold/30 shadow-2xl object-contain">
-            <p id="lightboxCaption" class="text-sm font-cinzel text-roseGold italic"></p>
+    <!-- SURAT DARI RIFQI -->
+    <section class="letter-card">
+      <div class="letter-header">
+        <div class="letter-header-icon">📜</div>
+        <div class="letter-header-text">
+          <h3>Surat untuk Habibah</h3>
+          <p>Ditulis dari sudut hati yang paling jujur</p>
         </div>
-    </div>
+      </div>
+      <div class="letter-body" id="typewriterLetter">
+        Selamat ulang tahun, <span class="letter-highlight">Habibah Khoirunnisa Ramadhan</span>.
 
+        Di hari yang begitu istimewa ini, aku hanya ingin menyapa dan merayakan hadirmu di dunia. Meski waktu terus berjalan dan langkah kita mungkin tak lagi di jalur yang sama, rasa hormat, kepedulian, dan doa tulusku untuk kebahagiaanmu tidak pernah berkurang sedikit pun.
 
-    <!-- SECRET LETTER MODAL -->
-    <div id="letterModal" class="fixed inset-0 bg-black/90 backdrop-blur-md z-50 hidden flex-col items-center justify-center p-4">
-        <div class="glass-card max-w-2xl w-full p-8 md:p-12 rounded-3xl border border-roseGold/50 space-y-6 relative max-h-[85vh] overflow-y-auto shadow-2xl">
-            <button onclick="closeSecretLetter()" class="absolute top-4 right-6 text-gray-400 hover:text-white text-2xl">&times;</button>
-            
-            <div class="text-center space-y-2 border-b border-roseGold/20 pb-4">
-                <span class="text-xs font-cinzel text-roseGold uppercase tracking-widest">A Letter From The Heart</span>
-                <h3 class="text-2xl md:text-3xl font-cinzel font-bold text-white">Untuk Habibah Khoirunnisa Ramadhan ✨</h3>
-            </div>
+        Terima kasih pernah menjadi bagian terindah dalam perjalanan hidupku. Setiap kenangan, tawa, dan cerita yang pernah kita lewati bersama adalah rekam jejak berharga yang mengajarkanku banyak hal tentang ketulusan dan kedewasaan.
 
-            <div class="space-y-4 text-xs md:text-sm text-gray-200 leading-relaxed font-light text-justify font-playfair">
-                <p class="first-letter:text-3xl first-letter:font-cinzel first-letter:text-roseGold first-letter:mr-1">
-                    Selamat ulang tahun untuk seseorang yang selalu punya cara sederhana namun ajaib untuk membuat dunia terasa jauh lebih indah: <strong class="text-roseGold font-semibold">Habibah</strong>.
-                </p>
-                <p>
-                    Mungkin hari-hari berlalu tanpa pernah kita sadari betapa cepatnya waktu berputar. Namun ada satu hal yang tak pernah berubah—kekagumanku pada caramu membawa diri, keanggunan senyumanmu, serta kehangatan tulus yang senantiasa memancar dari dalam dirimu.
-                </p>
-                <p>
-                    Terima kasih sudah lahir ke dunia dan tumbuh menjadi sosok wanita yang begitu luar biasa, kuat, dan memesona. Mengetahuimu dan melihatmu bahagia adalah salah satu hal yang selalu menenangkan hati.
-                </p>
-                <p>
-                    Di usiamu yang baru ini, doa paling tulus melangit untukmu: Semoga langkahmu selalu dituntun menuju kebahagiaan sejati, hatimu senantiasa dipeluk kedamaian, dan setiap impian indah yang kamu simpan dalam diam... perlahan menjadi kenyataan yang manis.
-                </p>
-                <p>
-                    Tetaplah menjadi Habibah yang senantiasa membawa sinar kebaikan untuk sekelilingmu. Jangan pernah ragu pada betapa berharganya dirimu.
-                </p>
-                <div class="pt-6 border-t border-roseGold/20 text-right space-y-1">
-                    <p class="italic text-gray-400 text-xs font-sans">Dengan segala kekaguman dan doa tulus,</p>
-                    <p class="font-sacramento text-2xl text-roseGold font-bold">Rifqi Bilal Afriza</p>
-                </div>
-            </div>
+        Di usiamu yang baru ini, doa terbaikku selalu menyertaimu:
+        Semoga Allah senantiasa melimpahkan <span class="letter-gold">kesehatan, kedamaian hati, kebahagiaan yang melimpah</span>, dan kemudahan dalam setiap impian serta cita-cita yang sedang kamu perjuangkan. Semoga kamu selalu dikelilingi oleh orang-orang yang mencintai dan menghargaimu sepenuh hati.
+
+        Tetaplah menjadi Habibah yang hangat, kuat, dan penuh dengan kebaikan. Jangan pernah biarkan senyum indahmu meredup hanya karena lelahnya dunia.
+
+        Selamat merayakan hari lahirmu. Semoga tahun ini membawa banyak kejutan manis dan berkah yang tak terhingga.
+      </div>
+      <div class="letter-signature">
+        Dengan tulus,<br>
+        <strong>Rifqi Bilal Afriza</strong>
+      </div>
+    </section>
+
+    <!-- GALERI FOTO (POLAROID) -->
+    <section>
+      <h2 class="section-title">Kenangan & Senyuman</h2>
+      <div class="gallery-grid">
+        
+        <div class="polaroid" onclick="openLightbox('foto1.jpeg')">
+          <div class="polaroid-img-box">
+            <img src="foto1.jpeg" alt="Habibah Khoirunnisa Ramadhan" onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=500'">
+          </div>
+          <div class="polaroid-caption">Senyum yang Selalu Menenangkan ✨</div>
         </div>
-    </div>
 
+        <div class="polaroid" onclick="openLightbox('foto2.jpeg')">
+          <div class="polaroid-img-box">
+            <img src="foto2.jpeg" alt="Habibah Khoirunnisa Ramadhan" onerror="this.src='https://images.unsplash.com/photo-1517841905240-472988babdf9?w=500'">
+          </div>
+          <div class="polaroid-caption">Pesona dalam Kesederhanaan 🌙</div>
+        </div>
 
-    <!-- JAVASCRIPT LOGIC -->
-    <script>
-        /* 1. Background Floating Stars Animation */
-        const canvas = document.getElementById('starsCanvas');
-        const ctx = canvas.getContext('2d');
-        let stars = [];
+        <div class="polaroid" onclick="openLightbox('foto3.jpeg')">
+          <div class="polaroid-img-box">
+            <img src="foto3.jpeg" alt="Habibah Khoirunnisa Ramadhan" onerror="this.src='https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=500'">
+          </div>
+          <div class="polaroid-caption">Kebaikan yang Tak Pernah Pudar 💖</div>
+        </div>
 
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
+      </div>
+    </section>
+
+    <!-- INTERACTIVE CAKE -->
+    <section class="cake-section">
+      <h2 class="section-title" style="margin-bottom: 20px;">Tiup Lilin & Minta Keinginan</h2>
+      <p style="color: var(--text-sub); margin-bottom: 30px; font-size: 0.95rem;">
+        Pikirkan satu harapan terbesarmu tahun ini, lalu klik tombol di bawah untuk meniup lilinnya! 🎂
+      </p>
+
+      <div class="cake-container">
+        <!-- Flame & Smoke -->
+        <div class="candle">
+          <div class="flame" id="candleFlame"></div>
+          <div class="smoke" id="candleSmoke"></div>
+        </div>
+
+        <!-- SVG Cake -->
+        <svg class="cake-svg" viewBox="0 0 200 150">
+          <!-- Plate -->
+          <ellipse cx="100" cy="140" rx="90" ry="10" fill="#cbd5e1" opacity="0.5"/>
+          <!-- Layer 1 (Bottom) -->
+          <rect x="30" y="90" width="140" height="45" rx="8" fill="#f472b6"/>
+          <path d="M 30,90 Q 40,105 50,90 Q 60,105 70,90 Q 80,105 90,90 Q 100,105 110,90 Q 120,105 130,90 Q 140,105 150,90 Q 160,105 170,90 L 170,100 L 30,100 Z" fill="#fff" opacity="0.8"/>
+          <!-- Layer 2 (Top) -->
+          <rect x="45" y="50" width="110" height="42" rx="6" fill="#fbbf24"/>
+          <path d="M 45,50 Q 55,65 65,50 Q 75,65 85,50 Q 95,65 105,50 Q 115,65 125,50 Q 135,65 145,50 Q 155,65 155,50 L 155,60 L 45,60 Z" fill="#fff" opacity="0.9"/>
+          <!-- Cherries -->
+          <circle cx="65" cy="46" r="6" fill="#e11d48"/>
+          <circle cx="100" cy="46" r="6" fill="#e11d48"/>
+          <circle cx="135" cy="46" r="6" fill="#e11d48"/>
+        </svg>
+      </div>
+
+      <button class="btn-blow" onclick="blowCandle()">
+        Minta Keinginan & Tiup Lilin 🎂
+      </button>
+
+      <div class="wish-result" id="wishText">
+        ✨ Semoga semua doa dan harapan baikmu diijabah oleh Allah SWT. Amin! ✨
+      </div>
+    </section>
+
+    <!-- CARDS / HARAPAN -->
+    <section>
+      <h2 class="section-title">Empat Kartu Doa</h2>
+      <p style="text-align: center; color: var(--text-sub); margin-top: -25px; margin-bottom: 35px; font-size: 0.9rem;">
+        (Klik tiap kartu untuk membaca pesannya)
+      </p>
+
+      <div class="cards-grid">
+        
+        <div class="flip-card" onclick="this.classList.toggle('flipped')">
+          <div class="flip-card-inner">
+            <div class="flip-card-front">
+              <div class="icon">🌸</div>
+              <h4>Kesehatan & Kedamaian</h4>
+              <p>Klik untuk membuka</p>
+            </div>
+            <div class="flip-card-back">
+              <p>Semoga fisik dan jiwamu selalu diberi kebugaran, serta hatimu senantiasa diliputi ketenangan di setiap langkah hidupmu.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="flip-card" onclick="this.classList.toggle('flipped')">
+          <div class="flip-card-inner">
+            <div class="flip-card-front">
+              <div class="icon">⭐</div>
+              <h4>Impian & Masa Depan</h4>
+              <p>Klik untuk membuka</p>
+            </div>
+            <div class="flip-card-back">
+              <p>Semoga segala hal yang sedang kamu perjuangkan dan impikan dipermudah jalannya serta membuahkan hasil terbaik.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="flip-card" onclick="this.classList.toggle('flipped')">
+          <div class="flip-card-inner">
+            <div class="flip-card-front">
+              <div class="icon">😊</div>
+              <h4>Senyuman Bahagia</h4>
+              <p>Klik untuk membuka</p>
+            </div>
+            <div class="flip-card-back">
+              <p>Semoga tidak ada satu pun beban yang sanggup menghapus tawa dan senyuman tulus dari wajah manis mu.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="flip-card" onclick="this.classList.toggle('flipped')">
+          <div class="flip-card-inner">
+            <div class="flip-card-front">
+              <div class="icon">🤍</div>
+              <h4>Penghormatan Tulus</h4>
+              <p>Klik untuk membuka</p>
+            </div>
+            <div class="flip-card-back">
+              <p>Terima kasih pernah menjadi warna indah dalam hidupku. Kebahagiaanmu akan selalu menjadi doaku dari jauh.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- FOOTER / WHATSAPP -->
+    <footer class="footer-section">
+      <a href="https://wa.me/?text=Makasih%20banyak%20ya%20Rifqi%20buat%20ucapan%20dan%20web%20ulang%20tahunnya...%20Aku%20terharu%20banget%20✨" target="_blank" class="btn-whatsapp">
+        <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24"><path d="M12.031 2c-5.517 0-9.993 4.476-9.993 9.993 0 1.763.459 3.479 1.332 4.996l-1.417 5.176 5.297-1.389c1.472.802 3.136 1.222 4.781 1.222h.004c5.518 0 9.994-4.476 9.994-9.993 0-2.673-1.041-5.186-2.932-7.077-1.891-1.891-4.403-2.932-7.066-2.932zm0 18.232h-.003c-1.5 0-2.972-.403-4.258-1.164l-.305-.181-3.161.828.843-3.083-.199-.317c-.838-1.334-1.282-2.887-1.282-4.484 0-4.593 3.738-8.331 8.333-8.331 2.225 0 4.316.867 5.889 2.441 1.573 1.574 2.439 3.666 2.438 5.892.001 4.595-3.737 8.332-8.335 8.332z"/></svg>
+        <span>Kirim Pesan Balasan ke Rifqi</span>
+      </a>
+      <p class="footer-note">Dibuat khusus untuk Habibah Khoirunnisa Ramadhan oleh Rifqi Bilal Afriza • 2026</p>
+    </footer>
+
+  </div>
+
+  <!-- LIGHTBOX IMAGE ZOOM -->
+  <div id="lightbox" onclick="closeLightbox()">
+    <img id="lightboxImg" src="" alt="Zoom Photo">
+  </div>
+
+  <!-- SCRIPTS -->
+  <script>
+    /* Audio Handling */
+    const audio = document.getElementById('bgMusic');
+    const musicBtn = document.getElementById('musicBtn');
+    const discIcon = document.getElementById('discIcon');
+    const musicText = document.getElementById('musicText');
+    let isPlaying = false;
+
+    function startExperience() {
+      document.getElementById('entranceOverlay').classList.add('hidden');
+      playAudio();
+      fireInitialConfetti();
+    }
+
+    function playAudio() {
+      audio.play().then(() => {
+        isPlaying = true;
+        discIcon.classList.add('playing');
+        musicText.innerText = 'Musik Diputar 🎵';
+      }).catch(err => {
+        console.log('Autoplay prevented:', err);
+        isPlaying = false;
+        discIcon.classList.remove('playing');
+        musicText.innerText = 'Putar Musik 🎵';
+      });
+    }
+
+    function toggleMusic() {
+      if (isPlaying) {
+        audio.pause();
+        isPlaying = false;
+        discIcon.classList.remove('playing');
+        musicText.innerText = 'Putar Musik 🎵';
+      } else {
+        playAudio();
+      }
+    }
+
+    /* Interactive Candle Blowing */
+    let candleBlown = false;
+    function blowCandle() {
+      if (candleBlown) return;
+      candleBlown = true;
+
+      const flame = document.getElementById('candleFlame');
+      const smoke = document.getElementById('candleSmoke');
+      const wishText = document.getElementById('wishText');
+
+      flame.classList.add('off');
+      smoke.classList.add('active');
+
+      // Confetti burst
+      confetti({
+        particleCount: 120,
+        spread: 80,
+        origin: { y: 0.6 },
+        colors: ['#f472b6', '#fbbf24', '#ffffff', '#e11d48']
+      });
+
+      setTimeout(() => {
+        wishText.classList.add('show');
+      }, 500);
+    }
+
+    function fireInitialConfetti() {
+      setTimeout(() => {
+        confetti({
+          particleCount: 50,
+          angle: 60,
+          spread: 55,
+          origin: { x: 0 }
+        });
+        confetti({
+          particleCount: 50,
+          angle: 120,
+          spread: 55,
+          origin: { x: 1 }
+        });
+      }, 800);
+    }
+
+    /* Lightbox Modal */
+    function openLightbox(src) {
+      const lightbox = document.getElementById('lightbox');
+      const lightboxImg = document.getElementById('lightboxImg');
+      lightboxImg.src = src;
+      lightbox.classList.add('active');
+    }
+
+    function closeLightbox() {
+      document.getElementById('lightbox').classList.remove('active');
+    }
+
+    /* Canvas Particle Animation (Rose Petals & Floating Stars) */
+    const canvas = document.getElementById('bgCanvas');
+    const ctx = canvas.getContext('2d');
+
+    let particles = [];
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    class Petal {
+      constructor() {
+        this.reset();
+      }
+
+      reset() {
+        this.x = Math.random() * canvas.width;
+        this.y = -20;
+        this.size = Math.random() * 8 + 6;
+        this.speedY = Math.random() * 1.5 + 0.8;
+        this.speedX = Math.random() * 1 - 0.5;
+        this.opacity = Math.random() * 0.5 + 0.3;
+        this.angle = Math.random() * Math.PI * 2;
+        this.spin = Math.random() * 0.02 - 0.01;
+        this.color = Math.random() > 0.3 ? '#f472b6' : '#fda4af';
+      }
+
+      update() {
+        this.y += this.speedY;
+        this.x += Math.sin(this.angle) * 0.8 + this.speedX;
+        this.angle += this.spin;
+
+        if (this.y > canvas.height + 20) {
+          this.reset();
         }
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
+      }
 
-        for(let i = 0; i < 140; i++) {
-            stars.push({
-                x: Math.random() * canvas.width,
-                y: Math.random() * canvas.height,
-                radius: Math.random() * 1.5 + 0.5,
-                alpha: Math.random(),
-                speed: Math.random() * 0.02 + 0.005
-            });
-        }
+      draw() {
+        ctx.save();
+        ctx.translate(this.x, this.y);
+        ctx.rotate(this.angle);
+        ctx.globalAlpha = this.opacity;
+        ctx.fillStyle = this.color;
+        
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.bezierCurveTo(-this.size, -this.size / 2, -this.size, this.size, 0, this.size);
+        ctx.bezierCurveTo(this.size, this.size, this.size, -this.size / 2, 0, 0);
+        ctx.fill();
+        
+        ctx.restore();
+      }
+    }
 
-        function animateStars() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            stars.forEach(s => {
-                s.alpha += s.speed;
-                if(s.alpha > 1 || s.alpha < 0) s.speed = -s.speed;
-                ctx.beginPath();
-                ctx.arc(s.x, s.y, s.radius, 0, Math.PI * 2);
-                ctx.fillStyle = `rgba(232, 180, 184, ${Math.abs(s.alpha)})`;
-                ctx.fill();
-            });
-            requestAnimationFrame(animateStars);
-        }
-        animateStars();
+    for (let i = 0; i < 40; i++) {
+      particles.push(new Petal());
+    }
 
-
-        /* 2. Web Audio Synthesizer - ROMANTIC HAPPY BIRTHDAY MELODY */
-        let audioCtx = null;
-        let isPlaying = false;
-        let timerId = null;
-
-        function toggleAudio() {
-            const btnText = document.getElementById('musicText');
-            if(!isPlaying) {
-                if(!audioCtx) {
-                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                }
-                playRomanticBirthdaySong();
-                isPlaying = true;
-                btnText.innerText = "MUSIK BERPUTAR 🎶";
-            } else {
-                if(timerId) clearInterval(timerId);
-                isPlaying = false;
-                btnText.innerText = "PUTAR MELODI ULANG TAHUN 🎼";
-            }
-        }
-
-        function playPianoTone(freq, duration, type='sine', volume=0.18) {
-            if(!audioCtx) return;
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-            
-            osc.type = type;
-            osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-            
-            // Soft attack and smooth decay (Piano/Music Box Envelope)
-            gain.gain.setValueAtTime(0, audioCtx.currentTime);
-            gain.gain.linearRampToValueAtTime(volume, audioCtx.currentTime + 0.08);
-            gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
-            
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-            
-            osc.start();
-            osc.stop(audioCtx.currentTime + duration);
-        }
-
-        function playRomanticBirthdaySong() {
-            // Frequencies for Happy Birthday notes in C Major (Slow, Soft Music Box style)
-            // G4, G4, A4, G4, C5, B4 ...
-            const birthdayMelody = [
-                { f: 392.00, d: 0.6 }, { f: 392.00, d: 0.4 }, { f: 440.00, d: 0.8 }, { f: 392.00, d: 0.8 }, { f: 523.25, d: 0.8 }, { f: 493.88, d: 1.4 },
-                { f: 392.00, d: 0.6 }, { f: 392.00, d: 0.4 }, { f: 440.00, d: 0.8 }, { f: 392.00, d: 0.8 }, { f: 587.33, d: 0.8 }, { f: 523.25, d: 1.4 },
-                { f: 392.00, d: 0.6 }, { f: 392.00, d: 0.4 }, { f: 783.99, d: 0.8 }, { f: 659.25, d: 0.8 }, { f: 523.25, d: 0.8 }, { f: 493.88, d: 0.8 }, { f: 440.00, d: 1.2 },
-                { f: 698.46, d: 0.6 }, { f: 698.46, d: 0.4 }, { f: 659.25, d: 0.8 }, { f: 523.25, d: 0.8 }, { f: 587.33, d: 0.8 }, { f: 523.25, d: 1.6 }
-            ];
-
-            const bassChords = [261.63, 329.63, 392.00, 440.00]; // Soft harmony backing
-
-            let noteIdx = 0;
-            
-            function step() {
-                if(!isPlaying) return;
-
-                let current = birthdayMelody[noteIdx % birthdayMelody.length];
-                // Play Main Melody
-                playPianoTone(current.f, current.d * 1.5, 'triangle', 0.2);
-                
-                // Play Soft Harmony Chord every 2 notes
-                if(noteIdx % 2 === 0) {
-                    let bassFreq = bassChords[(noteIdx / 2) % bassChords.length];
-                    playPianoTone(bassFreq / 2, 2.5, 'sine', 0.08);
-                }
-
-                noteIdx++;
-                timerId = setTimeout(step, current.d * 750); // Romantic slow tempo
-            }
-
-            step();
-        }
-
-
-        /* 3. Blow Candle Functionality */
-        let candleBlown = false;
-
-        function blowCandle() {
-            if(candleBlown) return;
-            candleBlown = true;
-            document.getElementById('flame').classList.add('off');
-            document.getElementById('smoke').classList.remove('hidden');
-            
-            // Romantic Rose Gold Confetti Blast
-            confetti({
-                particleCount: 120,
-                spread: 80,
-                origin: { y: 0.6 },
-                colors: ['#e8b4b8', '#f4c2c2', '#c97a8e', '#ffffff', '#ffd700']
-            });
-
-            setTimeout(() => {
-                alert("✨ Lilin telah terpadam! Semoga setiap doa dan harapan indah Habibah dikabulkan Tuhan.");
-            }, 300);
-        }
-
-        /* 4. Microphone Blow Sensor */
-        function initMic() {
-            if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-                alert("Mikrofon tidak didukung di browser ini.");
-                return;
-            }
-            navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
-                const micAudioCtx = new AudioContext();
-                const mic = micAudioCtx.createMediaStreamSource(stream);
-                const analyzer = micAudioCtx.createAnalyser();
-                mic.connect(analyzer);
-                const data = new Uint8Array(analyzer.frequencyBinCount);
-
-                document.getElementById('micBtn').innerText = "🎙️ Sensor Aktif (Tiup Layar HP/Laptop)";
-
-                function checkBlow() {
-                    analyzer.getByteFrequencyData(data);
-                    let sum = 0;
-                    for (let i = 0; i < data.length; i++) sum += data[i];
-                    let average = sum / data.length;
-                    if (average > 42 && !candleBlown) {
-                        blowCandle();
-                    }
-                    if (!candleBlown) requestAnimationFrame(checkBlow);
-                }
-                checkBlow();
-            }).catch(() => {
-                alert("Izin mikrofon ditolak.");
-            });
-        }
-
-
-        /* 5. Lightbox Modal Functions */
-        function openLightbox(src, caption) {
-            document.getElementById('lightboxImg').src = src;
-            document.getElementById('lightboxCaption').innerText = caption;
-            document.getElementById('lightboxModal').classList.add('modal-active');
-        }
-
-        function closeLightbox() {
-            document.getElementById('lightboxModal').classList.remove('modal-active');
-        }
-
-
-        /* 6. Secret Letter Modal Functions */
-        function openSecretLetter() {
-            document.getElementById('letterModal').classList.add('modal-active');
-            confetti({
-                particleCount: 60,
-                spread: 60,
-                origin: { y: 0.5 },
-                colors: ['#e8b4b8', '#ffffff', '#f4c2c2']
-            });
-        }
-
-        function closeSecretLetter() {
-            document.getElementById('letterModal').classList.remove('modal-active');
-        }
-
-
-        /* 7. Send Wish Function */
-        function sendWish() {
-            const input = document.getElementById('wishInput');
-            if(!input.value.trim()) {
-                alert("Silakan tuliskan doamu terlebih dahulu ✨");
-                return;
-            }
-
-            confetti({
-                particleCount: 140,
-                angle: 90,
-                spread: 100,
-                origin: { y: 0.8 },
-                colors: ['#e8b4b8', '#f4c2c2', '#ffffff', '#ffd700']
-            });
-
-            alert("🌟 Doa indahmu telah diterbangkan ke langit malam. Semoga menjadi kenyataan!");
-            input.value = "";
-        }
-    </script>
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach(p => {
+        p.update();
+        p.draw();
+      });
+      requestAnimationFrame(animate);
+    }
+    animate();
+  </script>
 </body>
 </html>
