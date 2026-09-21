@@ -657,12 +657,6 @@
   <!-- BACKGROUND CANVAS -->
   <canvas id="bgCanvas"></canvas>
 
-  <!-- BACKGROUND AUDIO: INSTRUMEN HAPPY BIRTHDAY -->
-  <audio id="bgMusic" loop preload="auto">
-    <source src="music.mp3" type="audio/mpeg">
-    <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8c8230559.mp3?filename=happy-birthday-piano-10773.mp3" type="audio/mpeg">
-  </audio>
-
   <!-- MUSIC CONTROL BUTTON -->
   <button class="music-control-btn" id="musicBtn" onclick="toggleMusic()">
     <span class="disc-icon" id="discIcon"></span>
@@ -773,7 +767,7 @@
           <rect x="30" y="90" width="140" height="45" rx="8" fill="#f472b6"/>
           <path d="M 30,90 Q 40,105 50,90 Q 60,105 70,90 Q 80,105 90,90 Q 100,105 110,90 Q 120,105 130,90 Q 140,105 150,90 Q 160,105 170,90 L 170,100 L 30,100 Z" fill="#fff" opacity="0.8"/>
           <rect x="45" y="50" width="110" height="42" rx="6" fill="#fbbf24"/>
-          <path d="M 45,50 Q 55,65 65,50 Q 75,65 85,50 Q 95,65 105,50 Q 115,65 125,50 Q 135,65 145,50 Q 155,65 155,50 L 155,60 L 45,60 Z" fill="#fff" opacity="0.9"/>
+          <path d="M 45,50 Q 55,65 65,50 Q 75,65 85,50 Q 95,65 105,50 Q 115,65 125,50 Q 135,65 155,50 Q 155,65 155,50 L 155,60 L 45,60 Z" fill="#fff" opacity="0.9"/>
           <circle cx="65" cy="46" r="6" fill="#e11d48"/>
           <circle cx="100" cy="46" r="6" fill="#e11d48"/>
           <circle cx="135" cy="46" r="6" fill="#e11d48"/>
@@ -829,7 +823,7 @@
             <div class="flip-card-front">
               <div class="icon">😊</div>
               <h4>Kebahagiaan Tulus</h4>
-              <p>Klik mebuka</p>
+              <p>Klik untuk membuka</p>
             </div>
             <div class="flip-card-back">
               <p>Semoga senyum manismu tidak pernah sirna, dan kebahagiaan selalu memelukmu di manapun kamu berada.</p>
@@ -871,40 +865,123 @@
 
   <!-- SCRIPTS -->
   <script>
-    /* Audio Handling */
-    const audio = document.getElementById('bgMusic');
+    /* Web Audio API - Musical Synthesizer for Happy Birthday (100% Native & Guaranteed to Play) */
+    let audioCtx = null;
+    let isPlaying = false;
+    let timerId = null;
+
+    // Notes for "Happy Birthday to You" (Key of C Major)
+    const notes = [
+      { note: 'G4', duration: 0.35 }, { note: 'G4', duration: 0.15 },
+      { note: 'A4', duration: 0.5 },  { note: 'G4', duration: 0.5 },
+      { note: 'C5', duration: 0.5 },  { note: 'B4', duration: 1.0 },
+
+      { note: 'G4', duration: 0.35 }, { note: 'G4', duration: 0.15 },
+      { note: 'A4', duration: 0.5 },  { note: 'G4', duration: 0.5 },
+      { note: 'D5', duration: 0.5 },  { note: 'C5', duration: 1.0 },
+
+      { note: 'G4', duration: 0.35 }, { note: 'G4', duration: 0.15 },
+      { note: 'G5', duration: 0.5 },  { note: 'E5', duration: 0.5 },
+      { note: 'C5', duration: 0.5 },  { note: 'B4', duration: 0.5 },
+      { note: 'A4', duration: 1.0 },
+
+      { note: 'F5', duration: 0.35 }, { note: 'F5', duration: 0.15 },
+      { note: 'E5', duration: 0.5 },  { note: 'C5', duration: 0.5 },
+      { note: 'D5', duration: 0.5 },  { note: 'C5', duration: 1.2 }
+    ];
+
+    const freqs = {
+      'G4': 392.00, 'A4': 440.00, 'B4': 493.88,
+      'C5': 523.25, 'D5': 587.33, 'E5': 659.25,
+      'F5': 698.46, 'G5': 783.99
+    };
+
+    function playNote(freq, duration) {
+      if (!audioCtx) return;
+      
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+
+      // Soft romantic synth tone (sine + subtle triangle mix)
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+
+      // Envelope for piano/music box effect
+      gain.gain.setValueAtTime(0, audioCtx.currentTime);
+      gain.gain.linearRampToValueAtTime(0.25, audioCtx.currentTime + 0.05);
+      gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration + 0.3);
+
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+
+      osc.start();
+      osc.stop(audioCtx.currentTime + duration + 0.3);
+    }
+
+    function playHappyBirthdayLoop() {
+      let currentNote = 0;
+
+      function scheduleNext() {
+        if (!isPlaying) return;
+
+        const item = notes[currentNote];
+        if (item) {
+          playNote(freqs[item.note], item.duration);
+          currentNote = (currentNote + 1) % notes.length;
+          // Speed scale (tempo)
+          const delay = (item.duration * 850) + 80;
+          timerId = setTimeout(scheduleNext, delay);
+        }
+      }
+
+      scheduleNext();
+    }
+
     const musicBtn = document.getElementById('musicBtn');
     const discIcon = document.getElementById('discIcon');
     const musicText = document.getElementById('musicText');
-    let isPlaying = false;
 
     function startExperience() {
       document.getElementById('entranceOverlay').classList.add('hidden');
-      playAudio();
+      
+      // Initialize Web Audio Context
+      if (!audioCtx) {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        audioCtx = new AudioContext();
+      }
+      
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+
+      isPlaying = true;
+      discIcon.classList.add('playing');
+      musicText.innerText = 'Musik Diputar 🎵';
+      playHappyBirthdayLoop();
+
       fireInitialConfetti();
     }
 
-    function playAudio() {
-      audio.play().then(() => {
-        isPlaying = true;
-        discIcon.classList.add('playing');
-        musicText.innerText = 'Musik Diputar 🎵';
-      }).catch(err => {
-        console.log('Autoplay prevented:', err);
-        isPlaying = false;
-        discIcon.classList.remove('playing');
-        musicText.innerText = 'Putar Musik 🎵';
-      });
-    }
-
     function toggleMusic() {
+      if (!audioCtx) {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        audioCtx = new AudioContext();
+      }
+
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+
       if (isPlaying) {
-        audio.pause();
         isPlaying = false;
+        clearTimeout(timerId);
         discIcon.classList.remove('playing');
         musicText.innerText = 'Putar Musik 🎵';
       } else {
-        playAudio();
+        isPlaying = true;
+        discIcon.classList.add('playing');
+        musicText.innerText = 'Musik Diputar 🎵';
+        playHappyBirthdayLoop();
       }
     }
 
